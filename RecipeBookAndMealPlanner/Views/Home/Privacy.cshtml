@@ -1,6 +1,100 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container mx-auto px-4 py-12 max-w-4xl">
+    <h1 class="text-4xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
+    
+    <div class="prose prose-lg">
+        <p class="text-gray-600 mb-6">
+            <strong>Last updated:</strong> October 18, 2025
+        </p>
+
+        <div class="bg-blue-50 border-l-4 border-blue-600 p-4 mb-8">
+            <p class="text-gray-700">
+                Your privacy is important to us. This privacy policy explains what personal information we collect and how we use it.
+            </p>
+        </div>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Information We Collect</h2>
+            <div class="space-y-4 text-gray-700">
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Account Information</h3>
+                    <p>When you register for an account, we collect your username and email address. This information is used to identify you and provide access to your personal recipe collection and meal plans.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Recipe Data</h3>
+                    <p>We store the recipes you create, including titles, descriptions, ingredients, instructions, and any images you upload. This data belongs to you and is only accessible to your account.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Meal Plans</h3>
+                    <p>Your weekly meal plans and shopping lists are stored in our database and are private to your account.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">How We Use Your Information</h2>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li>To provide and maintain the Recipe Book & Meal Planner service</li>
+                <li>To authenticate your identity and manage your account</li>
+                <li>To store and organize your recipes, meal plans, and shopping lists</li>
+                <li>To improve our service and user experience</li>
+                <li>To send you important updates about the service (if applicable)</li>
+            </ul>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Data Security</h2>
+            <p class="text-gray-700">
+                We take reasonable measures to protect your personal information from unauthorized access, use, or disclosure. Your password is encrypted, and your data is stored securely in our database.
+            </p>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Your Rights</h2>
+            <div class="space-y-3 text-gray-700">
+                <p><strong>Access:</strong> You can view and edit your account information and recipes at any time.</p>
+                <p><strong>Deletion:</strong> You can delete your recipes, meal plans, and account data at any time.</p>
+                <p><strong>Data Portability:</strong> Your recipe data belongs to you. You can export or delete it as needed.</p>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Cookies and Tracking</h2>
+            <p class="text-gray-700">
+                We use essential cookies to maintain your login session and remember your preferences. We do not use third-party tracking or advertising cookies.
+            </p>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Third-Party Services</h2>
+            <p class="text-gray-700">
+                This application does not share your data with third-party services. All your recipes, meal plans, and personal information remain within our system.
+            </p>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Changes to This Policy</h2>
+            <p class="text-gray-700">
+                We may update this privacy policy from time to time. Any changes will be posted on this page with an updated revision date.
+            </p>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Contact Us</h2>
+            <p class="text-gray-700">
+                If you have any questions about this privacy policy or your personal data, please contact us through your account settings.
+            </p>
+        </section>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-gray-200">
+        <a asp-controller="Home" asp-action="Index" class="text-blue-600 hover:text-blue-700 font-semibold">
+            ← Back to Home
+        </a>
+    </div>
+</div>

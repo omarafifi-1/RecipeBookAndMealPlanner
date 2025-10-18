@@ -1,16 +1,18 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RecipeBookAndMealPlanner</title>
+    <title>@ViewData["Title"] - DishPlan</title>
     <script src="https://cdn.jsdelivr.net/npm/@@tailwindcss/browser@4"></script>
     <script type="tailwind/config">
         module.exports = {
           theme: {
             extend: {
               colors: {
-                // Example of extending the theme
                 primary: '#3490dc',
               }
             }
@@ -18,39 +20,84 @@
         }
     </script>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RecipeBookAndMealPlanner</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+<body class="flex flex-col min-h-screen bg-gray-50">
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <a class="flex items-center text-xl font-semibold text-gray-900 hover:text-primary transition-colors" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="/recipe-book.png" alt="Logo" class="mx-auto h-10 w-auto" /> <p>DishPlan</p>
+                </a>
+                
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-button" class="sm:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+
+                <!-- Desktop menu -->
+                <ul class="hidden sm:flex space-x-6">
+                    <li>
+                        <a class="text-gray-700 hover:text-primary transition-colors" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li>
+                        @if (isAuthenticated)
+                        {
+                            <a class="text-gray-700 hover:text-primary transition-colors" asp-controller="Account" asp-action="Logout">Logout</a>
+                        }
+                        else
+                        {
+                            <a class="text-gray-700 hover:text-primary transition-colors" asp-controller="Account" asp-action="Login">Login</a>
+                        }
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden sm:hidden pb-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a class="block py-2 text-gray-700 hover:text-primary transition-colors" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li>
+                        @if (isAuthenticated)
+                        {
+                            <a class="text-gray-700 hover:text-primary transition-colors" asp-controller="Account" asp-action="Logout">Logout</a>
+                        }
+                        else
+                        {
+                            <a class="text-gray-700 hover:text-primary transition-colors" asp-controller="Account" asp-action="Login">Login</a>
+                        }
+                    </li>
+                </ul>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="container mx-auto px-4 flex-grow">
+        <main role="main" class="py-6">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - RecipeBookAndMealPlanner - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-t border-gray-200 bg-white mt-auto">
+        <div class="flex gap-4 justify-center container mx-auto px-4 py-4 text-center text-gray-600 text-sm" >
+            <p>&copy; 2025 - All Rights Reserved</p> | <a class="text-gray-700 hover:text-primary transition-colors" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
         </div>
     </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (menuButton && mobileMenu) {
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
