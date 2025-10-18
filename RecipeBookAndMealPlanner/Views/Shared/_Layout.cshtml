@@ -13,23 +13,46 @@
           theme: {
             extend: {
               colors: {
-                primary: '#3490dc',
+                primary: '#92400e',
+                secondary: '#b45309',
+                accent: '#d97706',
               }
             }
           }
         }
     </script>
+    <style>
+        body {
+            background-image: url('/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+        /* Overlay for better text readability */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(254, 243, 199, 0.85); /* amber-100 with 85% opacity */
+            z-index: -1;
+        }
+    </style>
 </head>
-<body class="flex flex-col min-h-screen bg-gray-50">
-    <header class="bg-white shadow-sm border-b border-gray-200">
+<body class="flex flex-col min-h-screen">
+    <header class="bg-amber-100/90 backdrop-blur-sm shadow-sm border-b border-amber-200">
         <nav class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16">
-                <a class="flex items-center text-xl font-semibold text-gray-900 hover:text-primary transition-colors" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="/recipe-book.png" alt="Logo" class="mx-auto h-10 w-auto" /> <p>DishPlan</p>
+                <a class="flex items-center gap-2 text-xl font-semibold text-amber-900 hover:text-orange-700 transition-colors" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="/recipe-book.png" alt="Logo" class="h-10 w-auto" />
+                    <p>DishPlan</p>
                 </a>
                 
                 <!-- Mobile menu button -->
-                <button id="mobile-menu-button" class="sm:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary">
+                <button id="mobile-menu-button" class="sm:hidden p-2 rounded-md text-amber-800 hover:bg-amber-200/70 focus:outline-none focus:ring-2 focus:ring-orange-500">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
@@ -38,16 +61,16 @@
                 <!-- Desktop menu -->
                 <ul class="hidden sm:flex space-x-6">
                     <li>
-                        <a class="text-gray-700 hover:text-primary transition-colors" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="text-amber-800 hover:text-orange-700 font-medium transition-colors" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li>
                         @if (isAuthenticated)
                         {
-                            <a class="text-gray-700 hover:text-primary transition-colors" asp-controller="Account" asp-action="Logout">Logout</a>
+                            <a class="text-amber-800 hover:text-orange-700 font-medium transition-colors" asp-controller="Account" asp-action="Logout">Logout</a>
                         }
                         else
                         {
-                            <a class="text-gray-700 hover:text-primary transition-colors" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="text-amber-800 hover:text-orange-700 font-medium transition-colors" asp-controller="Account" asp-action="Login">Login</a>
                         }
                     </li>
                 </ul>
@@ -57,16 +80,16 @@
             <div id="mobile-menu" class="hidden sm:hidden pb-4">
                 <ul class="space-y-2">
                     <li>
-                        <a class="block py-2 text-gray-700 hover:text-primary transition-colors" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="block py-2 text-amber-800 hover:text-orange-700 font-medium transition-colors" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li>
                         @if (isAuthenticated)
                         {
-                            <a class="text-gray-700 hover:text-primary transition-colors" asp-controller="Account" asp-action="Logout">Logout</a>
+                            <a class="text-amber-800 hover:text-orange-700 font-medium transition-colors" asp-controller="Account" asp-action="Logout">Logout</a>
                         }
                         else
                         {
-                            <a class="text-gray-700 hover:text-primary transition-colors" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="text-amber-800 hover:text-orange-700 font-medium transition-colors" asp-controller="Account" asp-action="Login">Login</a>
                         }
                     </li>
                 </ul>
@@ -80,9 +103,9 @@
         </main>
     </div>
 
-    <footer class="border-t border-gray-200 bg-white mt-auto">
-        <div class="flex gap-4 justify-center container mx-auto px-4 py-4 text-center text-gray-600 text-sm" >
-            <p>&copy; 2025 - All Rights Reserved</p> | <a class="text-gray-700 hover:text-primary transition-colors" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+    <footer class="border-t border-amber-200 bg-amber-100/90 backdrop-blur-sm mt-auto">
+        <div class="flex gap-4 justify-center container mx-auto px-4 py-4 text-center text-amber-800 text-sm">
+            <p>&copy; 2025 - All Rights Reserved</p> | <a class="text-amber-800 hover:text-orange-700 font-medium transition-colors" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
         </div>
     </footer>
 

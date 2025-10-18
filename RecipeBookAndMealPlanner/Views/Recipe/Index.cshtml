@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Recipe>
+@{
+    ViewData["Title"] = "My Recipes";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-amber-900 mb-2">My Recipes</h1>
+        </div>
+        <a asp-action="Create" 
+           class="mt-4 md:mt-0 inline-flex items-center px-6 py-3 bg-amber-700 text-white text-sm font-semibold rounded-md shadow-sm hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-2 transition-colors">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Add New Recipe
+        </a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <!-- Recipe Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var recipe in Model)
+            {
+                <div class="bg-amber-50/95 backdrop-blur-sm rounded-lg shadow-lg border border-amber-300 overflow-hidden hover:shadow-xl transition-shadow">
+                    <!-- Recipe Card Content -->
+                    <div class="p-6">
+                        <h2 class="text-xl font-semibold text-amber-900 mb-3">@recipe.Title</h2>
+                        
+                        <!-- Recipe Meta Info -->
+                        <div class="flex items-center gap-4 mb-4 text-sm text-amber-700">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"/>
+                                    <circle cx="12" cy="12" r="10"/>
+                                </svg>
+                                <span>@(recipe.RecipeIngredients?.Count ?? 0) ingredients</span>
+                            </div>
+                        </div>
+
+                        <!-- Instructions Preview -->
+                        @if (!string.IsNullOrEmpty(recipe.Instructions))
+                        {
+                            <p class="text-amber-800 text-sm mb-4 line-clamp-2">
+                                @(recipe.Instructions.Length > 100 ? recipe.Instructions.Substring(0, 100) + "..." : recipe.Instructions)
+                            </p>
+                        }
+
+                        <!-- Action Buttons -->
+                        <div class="flex gap-2">
+                            <a asp-action="Details" asp-route-id="@recipe.Id" 
+                               class="flex-1 text-center px-4 py-2 bg-amber-700 text-white text-sm font-medium rounded-md hover:bg-amber-800 transition-colors">
+                                View Recipe
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@recipe.Id" 
+                               class="px-4 py-2 bg-white border-2 border-amber-700 text-amber-700 text-sm font-medium rounded-md hover:bg-amber-50 transition-colors">
+                                Edit
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <!-- Empty State -->
+        <div class="bg-amber-50/95 backdrop-blur-sm rounded-lg shadow-lg border border-amber-300 p-12 text-center">
+            <svg class="w-16 h-16 mx-auto mb-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <h3 class="text-xl font-semibold text-amber-900 mb-2">No Recipes Yet</h3>
+            <p class="text-amber-700 mb-6">Start building your recipe collection by adding your first recipe!</p>
+            <a asp-action="Create" 
+               class="inline-flex items-center px-6 py-3 bg-amber-700 text-white text-sm font-semibold rounded-md shadow-sm hover:bg-amber-800 transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Add Your First Recipe
+            </a>
+        </div>
+    }
+</div>

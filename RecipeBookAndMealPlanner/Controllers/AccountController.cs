@@ -7,13 +7,13 @@ namespace RecipeBookAndMealPlanner.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<AppUser> userManager;
-        private readonly SignInManager<AppUser> signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<AppUser> _userManager, SignInManager<AppUser> _signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
-            userManager = _userManager;
-            signInManager = _signInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -36,11 +36,11 @@ namespace RecipeBookAndMealPlanner.Controllers
                 Email = model.Email
             };
 
-            var result = await userManager.CreateAsync(user, model.Password);
+            var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
-                await signInManager.SignInAsync(user, isPersistent: false);
+                await _signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -61,7 +61,7 @@ namespace RecipeBookAndMealPlanner.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM userinfo)
         {
-            var result = await signInManager.PasswordSignInAsync(userinfo.Username, userinfo.Password, userinfo.RememberMe, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(userinfo.Username, userinfo.Password, userinfo.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Home");
@@ -71,7 +71,7 @@ namespace RecipeBookAndMealPlanner.Controllers
         }
         public async Task<IActionResult> Logout()
         {
-            await signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
     }
