@@ -1,0 +1,109 @@
+@model Dictionary<string, List<string>>
+@{
+    ViewData["Title"] = "Shopping List";
+    var startOfWeek = ViewBag.StartOfWeek as DateTime? ?? DateTime.Today;
+}
+
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-amber-900 mb-2">Shopping List</h1>
+        <p class="text-amber-700">Week of @startOfWeek.ToString("MMM dd, yyyy")</p>
+    </div>
+
+    <div class="flex gap-4 mb-6">
+        <a asp-action="Index" 
+           class="inline-flex items-center px-4 py-2 bg-white border-2 border-amber-700 text-amber-700 text-sm font-semibold rounded-md shadow-sm hover:bg-amber-50 transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Back to Meal Planner
+        </a>
+        <button onclick="window.print()" 
+                class="inline-flex items-center px-4 py-2 bg-amber-700 text-white text-sm font-semibold rounded-md shadow-sm hover:bg-amber-800 transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+            </svg>
+            Print List
+        </button>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="bg-amber-50/95 backdrop-blur-sm rounded-lg shadow-xl border border-amber-300 p-8">
+            <div class="flex items-center mb-6">
+                <svg class="w-6 h-6 text-amber-700 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+                <h2 class="text-2xl font-bold text-amber-900">Ingredients Needed</h2>
+            </div>
+
+            <ul class="space-y-4">
+                @foreach (var ingredient in Model.OrderBy(i => i.Key))
+                {
+                    <li class="flex items-start border-b border-amber-200 pb-4 last:border-0">
+                        <input type="checkbox" class="mt-1 mr-4 h-5 w-5 text-amber-700 rounded border-amber-300 focus:ring-amber-500" />
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-amber-900 capitalize">@ingredient.Key</h3>
+                            <div class="mt-1 text-sm text-amber-700">
+                                @if (ingredient.Value.Count == 1)
+                                {
+                                    <span>@ingredient.Value.First()</span>
+                                }
+                                else
+                                {
+                                    <div class="space-y-1">
+                                        @foreach (var quantity in ingredient.Value)
+                                        {
+                                            <div>• @quantity</div>
+                                        }
+                                        <div class="font-semibold mt-2 text-amber-800">
+                                            Total needed: @ingredient.Value.Count recipe(s)
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+
+            <div class="mt-8 pt-6 border-t border-amber-300">
+                <p class="text-sm text-amber-700 italic">
+                    <strong>Total Items:</strong> @Model.Count
+                </p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="bg-amber-50/95 backdrop-blur-sm rounded-lg shadow-xl border border-amber-300 p-12 text-center">
+            <svg class="w-16 h-16 mx-auto mb-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+            <h3 class="text-xl font-semibold text-amber-900 mb-2">No Shopping List Yet</h3>
+            <p class="text-amber-700 mb-6">Add recipes to your meal plan to generate a shopping list!</p>
+            <a asp-action="Index" 
+               class="inline-flex items-center px-6 py-3 bg-amber-700 text-white text-sm font-semibold rounded-md shadow-sm hover:bg-amber-800 transition-colors">
+                Go to Meal Planner
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    @@media print {
+        header, footer, .no-print {
+            display: none !important;
+        }
+        body {
+            background: white !important;
+        }
+        body::before {
+            display: none !important;
+        }
+        input[type="checkbox"] {
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+    }
+</style>

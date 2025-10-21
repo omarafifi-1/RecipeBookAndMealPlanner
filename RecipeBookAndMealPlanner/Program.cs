@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RecipeBookAndMealPlanner.Data;
 using RecipeBookAndMealPlanner.Repositories;
+using RecipeBookAndMealPlanner.Interfaces;
+using RecipeBookAndMealPlanner.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("CS");
@@ -16,6 +18,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>()
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
+builder.Services.AddScoped<IPlannerRepository, PlannerRepository>();
+builder.Services.AddScoped<IPlannerService, PlannerService>();
 
 var app = builder.Build();
 

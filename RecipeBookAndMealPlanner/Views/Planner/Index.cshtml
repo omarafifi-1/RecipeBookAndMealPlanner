@@ -1,0 +1,232 @@
+@model MealPlannerVM
+@{
+    ViewData["Title"] = "Meal Planner";
+    var daysOfWeek = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+    var mealTypes = new[] { MealType.Breakfast, MealType.Lunch, MealType.Dinner };
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-amber-900 mb-2">Weekly Meal Planner</h1>
+            <p class="text-amber-700">Week of @Model.StartOfWeek.ToString("MMM dd, yyyy")</p>
+        </div>
+        <div class="flex gap-3 mt-4 md:mt-0">
+            <a asp-action="ShoppingList" 
+               class="inline-flex items-center px-6 py-3 bg-amber-700 text-white text-sm font-semibold rounded-md shadow-sm hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-2 transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                </svg>
+                Shopping List
+            </a>
+            <a asp-controller="Recipe" asp-action="Index" 
+               class="inline-flex items-center px-6 py-3 bg-white border-2 border-amber-700 text-amber-700 text-sm font-semibold rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-2 transition-colors">
+                My Recipes
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="bg-green-100 border-l-4 border-green-600 p-4 mb-6 rounded">
+            <p class="text-green-800">@TempData["SuccessMessage"]</p>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="bg-red-100 border-l-4 border-red-600 p-4 mb-6 rounded">
+            <p class="text-red-800">@TempData["ErrorMessage"]</p>
+        </div>
+    }
+
+    <div class="bg-amber-50/95 backdrop-blur-sm rounded-lg shadow-xl border border-amber-300 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-max">
+                <thead class="bg-amber-200/50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-amber-900 w-32">Meal</th>
+                        @for (int i = 0; i < 7; i++)
+                        {
+                            var currentDate = Model.StartOfWeek.AddDays(i);
+                            <th class="px-4 py-3 text-center text-sm font-semibold text-amber-900">
+                                <div>@daysOfWeek[i]</div>
+                                <div class="text-xs font-normal text-amber-700">@currentDate.ToString("MMM dd")</div>
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var mealType in mealTypes)
+                    {
+                        <tr class="border-t border-amber-200">
+                            <td class="px-4 py-4 font-semibold text-amber-900 bg-amber-100/50">
+                                @mealType.ToString()
+                            </td>
+                            @for (int i = 0; i < 7; i++)
+                            {
+                                var currentDate = Model.StartOfWeek.AddDays(i);
+                                var mealPlan = Model.WeeklyPlan?.FirstOrDefault(mp => mp.Date.Date == currentDate.Date && mp.MealType == mealType);
+                                
+                                <td class="px-2 py-2 border-l border-amber-200">
+                                    <div class="min-h-[100px] relative">
+                                        @if (mealPlan != null && mealPlan.Recipe != null)
+                                        {
+                                            <div class="bg-white rounded-md p-3 shadow-sm border border-amber-300 hover:shadow-md transition-shadow">
+                                                <h4 class="text-sm font-semibold text-amber-900 mb-2 line-clamp-2">
+                                                    @mealPlan.Recipe.Title
+                                                </h4>
+                                                <div class="flex gap-1">
+                                                    <a asp-controller="Recipe" asp-action="Details" asp-route-id="@mealPlan.Recipe.Id"
+                                                       class="flex-1 text-center px-2 py-1 text-xs bg-amber-700 text-white rounded hover:bg-amber-800 transition-colors">
+                                                        View
+                                                    </a>
+                                                    <form asp-action="RemoveFromPlan" method="post" class="flex-1">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="mealPlanId" value="@mealPlan.Id" />
+                                                        <button type="submit" 
+                                                                class="w-full px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                                                                onclick="return confirm('Remove this recipe from your meal plan?')">
+                                                            Remove
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" 
+                                                    onclick="showRecipeSelector(@i, '@mealType', '@currentDate.ToString("yyyy-MM-dd")')"
+                                                    class="w-full h-full min-h-[100px] border-2 border-dashed border-amber-300 rounded-md hover:border-amber-500 hover:bg-amber-50 transition-colors flex items-center justify-center">
+                                                <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                </svg>
+                                            </button>
+                                        }
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @if (Model.UserRecipes != null && Model.UserRecipes.Any())
+    {
+        <div class="mt-8 bg-amber-50/95 backdrop-blur-sm rounded-lg shadow-xl border border-amber-300 p-6">
+            <h2 class="text-xl font-bold text-amber-900 mb-4">Your Recipes</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                @foreach (var recipe in Model.UserRecipes)
+                {
+                    <div class="bg-white rounded-md p-4 shadow-sm border border-amber-200">
+                        <h3 class="font-semibold text-amber-900 mb-2">@recipe.Title</h3>
+                        <p class="text-xs text-amber-700 mb-3">@(recipe.RecipeIngredients?.Count ?? 0) ingredients</p>
+                        <div class="flex gap-2">
+                            <a asp-controller="Recipe" asp-action="Details" asp-route-id="@recipe.Id"
+                               class="flex-1 text-center px-3 py-1 text-xs bg-amber-700 text-white rounded hover:bg-amber-800 transition-colors">
+                                View
+                            </a>
+                            <button type="button" 
+                                    onclick="selectRecipeForPlanning(@recipe.Id)"
+                                    class="flex-1 px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
+                                Add to Plan
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="mt-8 bg-amber-50/95 backdrop-blur-sm rounded-lg shadow-xl border border-amber-300 p-12 text-center">
+            <svg class="w-16 h-16 mx-auto mb-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <h3 class="text-xl font-semibold text-amber-900 mb-2">No Recipes Yet</h3>
+            <p class="text-amber-700 mb-6">Create recipes first before planning your meals!</p>
+            <a asp-controller="Recipe" asp-action="Create" 
+               class="inline-flex items-center px-6 py-3 bg-amber-700 text-white text-sm font-semibold rounded-md shadow-sm hover:bg-amber-800 transition-colors">
+                Create Your First Recipe
+            </a>
+        </div>
+    }
+</div>
+
+<div id="recipe-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+        <div class="bg-amber-100 px-6 py-4 border-b border-amber-200">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-bold text-amber-900">Select a Recipe</h3>
+                <button onclick="closeRecipeModal()" class="text-amber-700 hover:text-amber-900">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="p-6">
+            <form id="add-to-plan-form" asp-action="AddToPlan" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="modal-date" name="date" />
+                <input type="hidden" id="modal-mealType" name="mealType" />
+                
+                <div class="space-y-3" id="recipe-list">
+                    @if (Model.UserRecipes != null)
+                    {
+                        @foreach (var recipe in Model.UserRecipes)
+                        {
+                            <label class="flex items-center p-4 border-2 border-amber-200 rounded-lg hover:border-amber-500 hover:bg-amber-50 cursor-pointer transition-colors">
+                                <input type="radio" name="recipeId" value="@recipe.Id" class="mr-3 text-amber-700 focus:ring-amber-500" required />
+                                <div class="flex-1">
+                                    <div class="font-semibold text-amber-900">@recipe.Title</div>
+                                    <div class="text-sm text-amber-700">@(recipe.RecipeIngredients?.Count ?? 0) ingredients</div>
+                                </div>
+                            </label>
+                        }
+                    }
+                </div>
+                
+                <div class="mt-6 flex gap-3">
+                    <button type="submit" class="flex-1 px-6 py-3 bg-amber-700 text-white font-semibold rounded-md hover:bg-amber-800 transition-colors">
+                        Add to Meal Plan
+                    </button>
+                    <button type="button" onclick="closeRecipeModal()" class="flex-1 px-6 py-3 bg-white border-2 border-amber-700 text-amber-700 font-semibold rounded-md hover:bg-amber-50 transition-colors">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let selectedRecipeId = null;
+
+        function showRecipeSelector(dayIndex, mealType, date) {
+            document.getElementById('modal-date').value = date;
+            document.getElementById('modal-mealType').value = mealType;
+            document.getElementById('recipe-modal').classList.remove('hidden');
+            
+            const radios = document.querySelectorAll('input[name="recipeId"]');
+            radios.forEach(radio => radio.checked = false);
+        }
+
+        function closeRecipeModal() {
+            document.getElementById('recipe-modal').classList.add('hidden');
+        }
+
+        function selectRecipeForPlanning(recipeId) {
+            selectedRecipeId = recipeId;
+            alert('Click on an empty meal slot in the calendar to add this recipe!');
+        }
+
+        document.getElementById('recipe-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRecipeModal();
+            }
+        });
+    </script>
+}
