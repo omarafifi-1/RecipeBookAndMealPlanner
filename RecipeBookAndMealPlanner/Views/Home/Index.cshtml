@@ -41,8 +41,8 @@
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <a asp-controller="Recipe" asp-action="Index" 
-                               class="group px-8 py-4 bg-gradient-to-r from-amber-700 to-orange-700 text-white text-lg font-bold rounded-xl shadow-2xl hover:shadow-amber-500/50 transform hover:-translate-y-1 transition-all duration-300">
+                            <a asp-controller="Recipe" asp-action="Index"
+                               class="flex items-center justify-center group px-8 py-4 bg-gradient-to-r from-amber-700 to-orange-700 text-white text-lg font-bold rounded-xl shadow-2xl hover:shadow-amber-500/50 transform hover:-translate-y-1 transition-all duration-300">
                                 <span class="flex items-center justify-center">
                                     My Recipes
                                     <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,8 +57,8 @@
                         }
                         else
                         {
-                            <a asp-controller="Account" asp-action="Register" 
-                               class="group px-8 py-4 bg-gradient-to-r from-amber-700 to-orange-700 text-white text-lg font-bold rounded-xl shadow-2xl hover:shadow-amber-500/50 transform hover:-translate-y-1 transition-all duration-300">
+                            <a asp-controller="Account" asp-action="Register"
+                               class="flex items-center justify-center group px-8 py-4 bg-gradient-to-r from-amber-700 to-orange-700 text-white text-lg font-bold rounded-xl shadow-2xl hover:shadow-amber-500/50 transform hover:-translate-y-1 transition-all duration-300">
                                 <span class="flex items-center justify-center">
                                     Start Free Today
                                     <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
