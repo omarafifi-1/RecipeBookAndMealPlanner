@@ -1,4 +1,5 @@
-﻿# 🍳 Recipe Book & Meal Planner
+🎬 [Live Demo](https://www.linkedin.com/feed/update/urn:li:activity:7387170845472882689/)
+# 🍳 Recipe Book & Meal Planner
 ## Overview
 A modern web application for managing recipes and planning weekly meals with automatic shopping list generation.
 
